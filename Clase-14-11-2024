@@ -1,0 +1,65 @@
+CREATE DATABASE IF NOT exists Citas_Medicas;
+USE Citas_Medicas;
+
+create TABLE pacientes( id INT auto_increment primary key,
+nombre varchar(50) not null,
+apellido varchar(50) not null,
+fecha_nacimiento date,
+telefono varchar(15),
+direccion varchar(100));
+
+create TABLE medicos( id INT auto_increment primary key,
+nombre VARCHAR(50) NOT NULL,
+apellido VARCHAR(50) NOT NULL,
+especialidad varchar(50) NOT NULL,
+telefono varchar(15) NOT NULL
+);
+
+create TABLE citas(id INT auto_increment primary key NOT NULL,
+paciente_id INT NOT NULL,
+medico_id INT NOT NULL,
+fecha_cita DATETIME NOT NULL,
+motivo VARCHAR(100) NOT NULL,
+estado ENUM("Agendada", "Completada","Cancelada"),
+foreign key (paciente_id) references pacientes(id),
+foreign key (medico_id) references medicos(id)
+);
+
+insert into pacientes (nombre, apellido, fecha_nacimiento, telefono, direccion)
+values ("Juan", "Perez", "1985-04-12", "309890672", "Calle 1 # 2-34"),
+("Miguel", "Rocha", "2006-08-08", "1072648514", "Calle 24 f # 85B-85"),
+("Yosed", "Sanchez", "2004-10-07", "1076680983", "Carrera 23 A # 10-93"),
+("Pedro", "Pascal", "1492-10-10", "1084929671", "Calle 12 # 3-45"),
+("Manuel", "Medrano", "2024-11-14", "1234325445", "Carrera 85 # 43B-12")
+;
+
+insert into medicos (nombre, apellido, especialidad, telefono)
+values ("Javier", "Rentería", "Cardiología", "1234567890"),
+("Yeider", "Yajure", "Odontología", "7238723423"),
+("Zullie", "Noches", "Neurología", "0813457768")
+;
+
+insert into citas (paciente_id, medico_id, fecha_cita, motivo, estado)
+values (3,2,"2024-11-15 10:00:00", "Dolor de muela", "Agendada"),
+(5,3,"2024-11-16 11:30:00", "Dolor de cabeza", "Agendada"),
+(1,1,"2024-12-01 06:00:00", "Dolor en el pecho", "Agendada")
+; 
+select id, nombre, apellido from medicos;
+select * from pacientes;
+
+select * from citas where paciente_id = 1;
+select * from citas;
+
+select citas.id AS numero_cita, pacientes.nombre AS nombre_paciente,
+       medicos.nombre AS nombre_medico, citas.fecha_cita, citas.motivo, citas.estado
+from citas
+join pacientes on citas.paciente_id = pacientes.id
+join medicos on citas.medico_id = medicos.id;
+
+SELECT * FROM pacientes;
+
+update pacientes SET nombre="Gabriel" where id=1;
+UPDATE pacientes SET apellido="Galeano" where id=1;
+
+
+
